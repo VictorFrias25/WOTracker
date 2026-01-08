@@ -22,10 +22,10 @@ async function appendCsvToJson(csvFilePath, jsonFilePath) {
         // --- NEW LOGIC: Filter out duplicates ---
 
         // 1. Create a Set of existing IDs for lightning-fast lookup
-        const existingIds = new Set(existingData.map(item => item.id));
+        const existingIds = new Set(existingData.map(item => item.wo_number));
 
         // 2. Only keep records whose ID is NOT in that Set
-        const uniqueNewRecords = newRecords.filter(record => !existingIds.has(record.id));
+        const uniqueNewRecords = newRecords.filter(record => !existingIds.has(record.wo_number));
 
         if (uniqueNewRecords.length === 0) {
             console.log("No new unique records to add.");
