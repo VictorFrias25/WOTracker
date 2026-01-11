@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\db",
+    "\\Public",
     "\\Scripts"
   ],
-  "SelectedNode": "\\db\\WODB.json",
+  "SelectedNode": "\\Scripts\\woImporter.js",
   "PreviewInSolutionExplorer": false
 }
