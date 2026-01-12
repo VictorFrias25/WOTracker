@@ -7,7 +7,7 @@
     "facility": "PCR",
     "room": "1-206",
     "date_opened": "01/05/26",
-    "status": "ready_to_close",
+    "status": "Completed",
     "info_description": "1 - Classroom AV: Q: Please describe the type of equipment,-Brand or Model-and Identifying Numbers (ONE WORK ORDER PER EACH PIECE OF EQUIPMENT PLEASE):  A: ViewSonic Whiteboard  Q: Please describe the nature of the problem: A: The board will often disconnect from the Teacher PC throughout the day and has not been responding to the touch when connected to the Teacher PC."
   },
   {
@@ -18,7 +18,7 @@
     "facility": "PCR",
     "room": "1-214",
     "date_opened": "12/19/25",
-    "status": "Open",
+    "status": "Completed",
     "info_description": "Computer, printer, scanner, etc. -- Repair: J.L. - 448769 Computer screen is broken and needs to be replaced."
   },
   {
@@ -29,7 +29,7 @@
     "facility": "PCR",
     "room": "4-103",
     "date_opened": "12/19/25",
-    "status": "Open",
+    "status": "Completed",
     "info_description": "Computer, printer, scanner, etc. -- Install/Move: Student laptop sound still doesn't work even with headphone jack inserted. (Miguel -Cannizzaro)"
   },
   {
@@ -51,7 +51,7 @@
     "facility": "PCR",
     "room": "4-103",
     "date_opened": "12/18/25",
-    "status": "Open",
+    "status": "Completed",
     "info_description": "Computer, printer, scanner, etc. -- Install/Move: Loaner Laptop - - Headphone port not working"
   },
   {
@@ -62,7 +62,7 @@
     "facility": "PCR",
     "room": "1-213",
     "date_opened": "12/18/25",
-    "status": "Open",
+    "status": "Completed",
     "info_description": "Computer, printer, scanner, etc. -- Repair: Student ID# 494849's laptop keeps freezing while working on QuickTables and other daily assignments (probably just needs reimaged)."
   },
   {
@@ -73,7 +73,7 @@
     "facility": "PCR",
     "room": "4-103",
     "date_opened": "12/17/25",
-    "status": "Open",
+    "status": "Completed",
     "info_description": "Computer, printer, scanner, etc. -- Install/Move: laptop headphone jack isn't working. (loaner)"
   },
   {
@@ -84,7 +84,7 @@
     "facility": "pcr",
     "room": "1-126",
     "date_opened": "1/8/26",
-    "status": "Open",
+    "status": "Completed",
     "info_description": "This is a test workorder."
   }
 ]

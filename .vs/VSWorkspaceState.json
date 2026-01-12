@@ -3,8 +3,9 @@
     "",
     "\\db",
     "\\Public",
+    "\\Public\\Scripts",
     "\\Scripts"
   ],
-  "SelectedNode": "\\Scripts\\woImporter.js",
+  "SelectedNode": "\\Public\\index.html",
   "PreviewInSolutionExplorer": false
 }

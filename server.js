@@ -5,12 +5,13 @@ const fs = require('fs')
 const app = express()
 const port = 3001
 app.use(express.json())
+app.use(express.static(path.join(__dirname, './public')))
 const woFilePath = path.join(__dirname, './db/WODB.json')
 
-app.get('/', (req, res) => res.send('Welcome to WOTracker. nav to /wo'))
+//app.get('/', (req, res) => res.send('Welcome to WOTracker. nav to /wo'))
 
 //work order list route
-app.get('/wo', (req, res) => 
+app.get('/api/wo', (req, res) => 
     fs.readFile(woFilePath, 'utf8', (err, data) => {
         if (err) {
             console.error(err)
@@ -28,7 +29,7 @@ app.get('/wo', (req, res) =>
 )
 
 //work order status change route
-app.put('/wo/:wo_number', (req, res) => {
+app.put('/api/wo/:wo_number', (req, res) => {
     fs.readFile(woFilePath, 'utf8', (err, data) => {
         if (err) {
             console.error(err)
