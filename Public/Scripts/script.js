@@ -8,6 +8,23 @@
         console.error(`Error fetching data:`, error)
         document.getElementById('data-container').textContent = `Failed to load data`
     })*/
+const openFilterBtn = document.getElementById('show-open')
+const completedFilterBtn = document.getElementById('show-completed')
+const allFilterbtn = document.getElementById('show-all')
+let currentFilter = 'all'
+
+async function openFilter() {
+
+}
+
+async function completeFilter() {
+
+}
+
+async function allFilter() {
+
+}
+
 
 fetch('/api/wo')
     .then(response => response.json())
@@ -21,11 +38,16 @@ fetch('/api/wo')
             const li = document.createElement('li')
             li.style.marginBottom = "10px"
 
-            li.innerHTML = `
+            if (wo.status == 'Completed') {
+                li.style.display = 'none'
+            } else {
+
+                li.innerHTML = `
                 <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
                 <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
             `
-            ul.appendChild(li)
+                ul.appendChild(li)
+            }
         })
 
         container.appendChild(ul)
@@ -34,6 +56,8 @@ fetch('/api/wo')
         console.error('Error fetching data:', error)
         document.getElementById('data-container').textContent = 'Failed to load data'
     })
+
+
 
 async function updateStatus(woNumber, newStatus) {
     try {
@@ -53,3 +77,8 @@ async function updateStatus(woNumber, newStatus) {
         console.error('Update error:', err)
     }
 }
+
+
+openFilterBtn.addEventListener('click', openFilter())
+completedFilterBtn.addEventListener('click', completedFilter())
+allFilterbtn.addEventListener('click', allFilter())
