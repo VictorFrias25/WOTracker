@@ -1,63 +1,163 @@
-/*fetch('/api/wo')
-    .then(response => response.json())
-    .then(data => {
-        const container = document.getElementById('data-container')
-        container.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`
-    })
-    .catch(error => {
-        console.error(`Error fetching data:`, error)
-        document.getElementById('data-container').textContent = `Failed to load data`
-    })*/
+///*fetch('/api/wo')
+//    .then(response => response.json())
+//    .then(data => {
+//        const container = document.getElementById('data-container')
+//        container.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`
+//    })
+//    .catch(error => {
+//        console.error(`Error fetching data:`, error)
+//        document.getElementById('data-container').textContent = `Failed to load data`
+//    })*/
+//const openFilterBtn = document.getElementById('show-open')
+//const completedFilterBtn = document.getElementById('show-completed')
+//const allFilterbtn = document.getElementById('show-all')
+//let currentFilter = 'all'
+
+////function openFilter() {
+////    currentFilter == 'opened'
+////    //location.reload()
+////}
+
+////function completeFilter() {
+////    currentFilter == 'completed'
+////    //location.reload()
+////}
+
+////function allFilter() {
+////    currentFilter == 'all'
+////    //location.reload()
+////}
+
+
+//fetch('/api/wo')
+//    .then(response => response.json())
+//    .then(data => {
+//        const container = document.getElementById('data-container')
+//        container.innerHTML = ''
+
+//        const ul = document.createElement('ul')
+
+//        data.forEach(wo => {
+//            const li = document.createElement('li')
+//            li.style.marginBottom = "10px"
+
+//            //if (wo.status == 'Completed') {
+//            //    li.style.display = 'none'
+//            //} else {
+
+//            //    li.innerHTML = `
+//            //    <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
+//            //    <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
+//            //`
+//            //    ul.appendChild(li)
+//            //}
+
+//            switch (currentFilter) {
+//                case 'all':
+//                    li.innerHTML = `
+//                <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
+//                <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
+//            `
+//                    ul.appendChild(li)
+//                    break
+//                case 'opened':
+//                    if (wo.status == 'Completed') {
+//                        li.style.display = 'none'
+//                    } else {
+
+//                        li.innerHTML = `
+//                <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
+//                <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
+//            `
+//                        ul.appendChild(li)
+//                    }
+//                    break
+//                case 'completed':
+//                    if (wo.status == 'Open') {
+//                        li.style.display = 'none'
+//                    } else {
+
+//                        li.innerHTML = `
+//                <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
+//                <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
+//            `
+//                        ul.appendChild(li)
+//                    }
+//                    break
+//            }
+
+//        })
+
+//        container.appendChild(ul)
+//    })
+//    .catch(error => {
+//        console.error('Error fetching data:', error)
+//        document.getElementById('data-container').textContent = 'Failed to load data'
+//    })
+
+
+
+//async function updateStatus(woNumber, newStatus) {
+//    try {
+//        const response = await fetch(`/api/wo/${woNumber}`, {
+//            method: 'PUT',
+//            headers: { 'Content-Type': 'application/json' },
+//            body: JSON.stringify({ status: newStatus })
+//        })
+
+//        if (response.ok) {
+//            alert(`Work Order ${woNumber} updated!`)
+//            location.reload()
+//        } else {
+//            alert('Failed to update work order')
+//        }
+//    } catch (err) {
+//        console.error('Update error:', err)
+//    }
+//}
+
+
+//openFilterBtn.addEventListener('click', currentFilter == 'opened')
+//completedFilterBtn.addEventListener('click', currentFilter == 'completed')
+//allFilterbtn.addEventListener('click', currentFilter == 'all')
+
+const container = document.getElementById('data-container')
 const openFilterBtn = document.getElementById('show-open')
 const completedFilterBtn = document.getElementById('show-completed')
 const allFilterbtn = document.getElementById('show-all')
+
 let currentFilter = 'all'
 
-async function openFilter() {
+async function renderList() {
+    try {
+        const response = await fetch('/api/wo')
+        const data = await response.json()
 
-}
-
-async function completeFilter() {
-
-}
-
-async function allFilter() {
-
-}
-
-
-fetch('/api/wo')
-    .then(response => response.json())
-    .then(data => {
-        const container = document.getElementById('data-container')
         container.innerHTML = ''
-
         const ul = document.createElement('ul')
 
-        data.forEach(wo => {
+        const filteredData = data.filter(wo => {
+            if (currentFilter === 'opened') return wo.status !== 'Completed'
+            if (currentFilter === 'completed') return wo.status === 'Completed'
+            return true 
+        })
+
+        filteredData.forEach(wo => {
             const li = document.createElement('li')
-            li.style.marginBottom = "10px"
-
-            if (wo.status == 'Completed') {
-                li.style.display = 'none'
-            } else {
-
-                li.innerHTML = `
+            li.innerHTML = `
                 <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
-                <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
+                ${wo.status !== 'Completed'
+                    ? `<button onclick="updateStatus('${wo.wo_number}', 'Completed')">Complete</button>`
+                    : ''}
             `
-                ul.appendChild(li)
-            }
+            ul.appendChild(li)
         })
 
         container.appendChild(ul)
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error)
-        document.getElementById('data-container').textContent = 'Failed to load data'
-    })
-
-
+    } catch (err) {
+        console.error("Render error:", err)
+    }
+}
 
 async function updateStatus(woNumber, newStatus) {
     try {
@@ -68,17 +168,27 @@ async function updateStatus(woNumber, newStatus) {
         })
 
         if (response.ok) {
-            alert(`Work Order ${woNumber} updated!`)
-            location.reload()
-        } else {
-            alert('Failed to update work order')
+            console.log(`Updated ${woNumber} successfully.`)
+            renderList()
         }
     } catch (err) {
         console.error('Update error:', err)
     }
 }
 
+openFilterBtn.addEventListener('click', () => {
+    currentFilter = 'opened'
+    renderList()
+})
 
-openFilterBtn.addEventListener('click', openFilter())
-completedFilterBtn.addEventListener('click', completedFilter())
-allFilterbtn.addEventListener('click', allFilter())
+completedFilterBtn.addEventListener('click', () => {
+    currentFilter = 'completed'
+    renderList()
+})
+
+allFilterbtn.addEventListener('click', () => {
+    currentFilter = 'all'
+    renderList()
+})
+
+renderList()

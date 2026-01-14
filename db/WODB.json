@@ -18,7 +18,7 @@
     "facility": "PCR",
     "room": "1-214",
     "date_opened": "12/19/25",
-    "status": "Completed",
+    "status": "Open",
     "info_description": "Computer, printer, scanner, etc. -- Repair: J.L. - 448769 Computer screen is broken and needs to be replaced."
   },
   {
@@ -84,7 +84,7 @@
     "facility": "pcr",
     "room": "1-126",
     "date_opened": "1/8/26",
-    "status": "Completed",
+    "status": "Open",
     "info_description": "This is a test workorder."
   }
 ]
