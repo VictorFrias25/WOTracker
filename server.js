@@ -1,6 +1,6 @@
 const express = require('express')
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs').promises
 const multer = require('multer')
 const {parse} = require('csv-parse/sync')
 
@@ -60,17 +60,32 @@ app.put('/api/wo/:wo_number', (req, res) => {
     })
 })
 
-app.post('/api/importWO', upload.single('csvFile'), async (req, res) => {
+app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
     try{
         if (!req.file)
          return res.status(400).send(`No  file uploaded.`)
 
-        const csvRaw = req.file.buffer.toString(`utf-8`)
-        const newRecords = parse(csvRaw, {
+        const rawCSV = req.file.buffer.toString(`utf-8`)
+        const rawWorkorders = parse(rawCSV, {
             columns: true,
             skip_empty_lines: true,
+            from_line: 4,
             trim: true
         })
+
+        const cleanedWorkorders = rawWorkorders
+            .filter(row => row.EIncidentID && !row.EIncidentID.includes('EIncident'))
+            .map(row => ({
+                wo_number: row.EIncidentID,
+                username: row.ECustomerID,
+                first_name: row.FirstName,
+                last_name: row.LastName,
+                facility: row.EFacilityIDIncident,
+                room: row.RoomIncident,
+                date_opened: row.InsertedDT,
+                status: row.EStatusID,
+                info_description: row.RequestDescription
+            }))
 
         let existingData = []
         try{
@@ -80,7 +95,7 @@ app.post('/api/importWO', upload.single('csvFile'), async (req, res) => {
             if (error.code !== 'ENOENT') throw error
         }
         const existingWO = new Set(existingData.map(item => item.wo_number))
-        const uniqueNewWO = newRecords.filter(record => !existingWO.has(record.wo_number))
+        const uniqueNewWO = cleanedWorkorders.filter(record => !existingWO.has(record.wo_number))
 
         if(uniqueNewWO.length === 0) 
             return res.json({ message: `No new work orders found.`, added: 0})
@@ -90,7 +105,11 @@ app.post('/api/importWO', upload.single('csvFile'), async (req, res) => {
 
         res.json({
             message: `Success, added ${uniqueNewWO.length} new workorders`,
-            ignored: newRecords.length - uniqueNewWO.length
+            stats: {
+                recieved: cleanedWorkorders.length,
+                added: uniqueNewWO.length,
+                ignored: cleanedWorkorders.length - uniqueNewWO.length
+            }
         })
     } catch (err) {
         console.error(err)

@@ -125,8 +125,10 @@ const container = document.getElementById('data-container')
 const openFilterBtn = document.getElementById('show-open')
 const completedFilterBtn = document.getElementById('show-completed')
 const allFilterbtn = document.getElementById('show-all')
+const uploadCSVbtn = document.getElementById('uploadCSV')
 
 let currentFilter = 'all'
+
 
 async function renderList() {
     try {
@@ -190,5 +192,20 @@ allFilterbtn.addEventListener('click', () => {
     currentFilter = 'all'
     renderList()
 })
+
+uploadCSVbtn.addEventListener('click', async() => {
+    let csvFile = document.querySelector('csvImport')
+    let formData = new FormData()
+    formData.append('csvFile', csvFile.files[0])
+
+    let response = await fetch('/api/importWOCSV', {
+        method: 'POST',
+        body: formData
+    })
+
+    let result = await response.json()
+    alert(result.message)
+})
+
 
 renderList()

@@ -6,9 +6,19 @@
 <body>
     This is the start to HTML output for this project.
 
-    <button id="show-open">Show Open</button>
+    <!-- <button id="show-open">Show Open</button>
     <button id="show-completed">Show Completed</button>
-    <button id="show-all">Show All</button>
+    <button id="show-all">Show All</button> -->
+
+    <label for="filter-open">Show:</label>
+    <select name="filter-open" id="filter-open">
+        <option value="show-open" id="show-open">Opened workorders</option>
+        <option value="show-completed" id="show-completed">Completed workorders</option>
+        <option value="show-all" id="show-all">All workorders</option>
+    </select>
+
+    <input type="file" id="csvImport" accept=".csv">
+    <button id="uploadCSV">CSV IMPORT</button>
 
     <div id="data-container">Loading...</div>
     <script src="./Scripts/script.js"></script>
