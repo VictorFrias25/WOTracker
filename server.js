@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs').promises
 const multer = require('multer')
 const {parse} = require('csv-parse/sync')
+const { error } = require('console')
 
 const app = express()
 const port = 3001
@@ -15,50 +16,68 @@ const woFilePath = path.join(__dirname, './db/WODB.json')
 //app.get('/', (req, res) => res.send('Welcome to WOTracker. nav to /wo'))
 
 //work order list route
-app.get('/api/wo', (req, res) => 
-    fs.readFile(woFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err)
-            return res.status(500).send(`Error reading file`)
+app.get('/api/wo', async (req, res) => {
+    try{
+        const data = await fs.readFile(woFilePath, 'utf-8')
+        const woJsonData = JSON.parse(data)
+        res.json(woJsonData)
+    } catch (err) {
+        console.error(`Read Error: ${err}`)
+        res.status(500).send(`Error reading or parsing JSON data`)
+    }
+}
+)   
+
+app.put('/api/wo/:wo_number', async (req, res) => {
+    try{
+        const data = await fs.readFile(woFilePath, 'utf-8')
+        let woJSONData = JSON.parse(data)
+
+        const woNum = req.params.wo_number
+        const updatedData = req.body
+
+        const woIndex = woJsonData.findIndex(item => item.wo_number === woNum)
+
+        if(woIndex !== -1){
+            woJsonData[woIndex] = { ...woJsonData[woIndex], ...updatedData}
+            await fs.writeFile(woFilePath, JSON.stringify(woJSONData, null, 2), "utf-8")
+            res.json(woJSONData[woIndex])
+        } else {
+            res.status(404).json({error: "workorder not found"})
         }
-        try {
-            const woJsonData = JSON.parse(data)
-            res.json(woJsonData)
-        }
-        catch(parseErr) {
-            console.error(parseErr)
-            res.status(500).send(`Error parsing JSON data`)
-        }
-    })
-)
+    } catch (err){
+        console.error(`Update Error: ${err}`)
+        res.status(500).send(`Error updating workorder`)
+    }
+})
 
 //work order status change route
-app.put('/api/wo/:wo_number', (req, res) => {
-    fs.readFile(woFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err)
-            return res.status(500).send(`Error reading file`)
-        }
-        try {
-            const woJsonData = JSON.parse(data)
-            const woNum = req.params.wo_number
-            const updatedData = req.body
+// app.put('/api/wo/:wo_number', (req, res) => {
+//     fs.readFile(woFilePath, 'utf8', (err, data) => {
+//         if (err) {
+//             console.error(err)
+//             return res.status(500).send(`Error reading file`)
+//         }
+//         try {
+//             const woJsonData = JSON.parse(data)
+//             const woNum = req.params.wo_number
+//             const updatedData = req.body
 
-            const woIndex = woJsonData.findIndex(item => item.wo_number === woNum)
+//             const woIndex = woJsonData.findIndex(item => item.wo_number === woNum)
 
-            if (woIndex !== -1) {
-                woJsonData[woIndex] = { ...woJsonData[woIndex], ...updatedData }
-                fs.writeFileSync(woFilePath, JSON.stringify(woJsonData, null, 2))
-                res.json(woJsonData[woIndex])
-            } else {
-                res.status(404).json({ error: `Work order not found` })
-            }
-        } catch (parseErr) {
-            console.error(parseErr)
-            res.status(500).send(`Error parsing JSON data`)
-        }
-    })
-})
+//             if (woIndex !== -1) {
+//                 woJsonData[woIndex] = { ...woJsonData[woIndex], ...updatedData }
+//                 fs.writeFileSync(woFilePath, JSON.stringify(woJsonData, null, 2))
+//                 res.json(woJsonData[woIndex])
+//             } else {
+//                 res.status(404).json({ error: `Work order not found` })
+//             }
+//         } catch (parseErr) {
+//             console.error(parseErr)
+//             res.status(500).send(`Error parsing JSON data`)
+//         }
+//     })
+// })
 
 app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
     try{
@@ -118,5 +137,5 @@ app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
 })
 
 app.listen(port, () =>
-   console.log(`Express server running @ https://localhost:${port}`)
+   console.log(`Express server running @ http://localhost:${port}`)
 )
