@@ -36,10 +36,10 @@ app.put('/api/wo/:wo_number', async (req, res) => {
         const woNum = req.params.wo_number
         const updatedData = req.body
 
-        const woIndex = woJsonData.findIndex(item => item.wo_number === woNum)
+        const woIndex = woJSONData.findIndex(item => item.wo_number === woNum)
 
         if(woIndex !== -1){
-            woJsonData[woIndex] = { ...woJsonData[woIndex], ...updatedData}
+            woJSONData[woIndex] = { ...woJSONData[woIndex], ...updatedData}
             await fs.writeFile(woFilePath, JSON.stringify(woJSONData, null, 2), "utf-8")
             res.json(woJSONData[woIndex])
         } else {
@@ -89,11 +89,15 @@ app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
             columns: true,
             skip_empty_lines: true,
             from_line: 4,
-            trim: true
+            trim: true,
+            relax_column_count: true
         })
 
         const cleanedWorkorders = rawWorkorders
-            .filter(row => row.EIncidentID && !row.EIncidentID.includes('EIncident'))
+            //.filter(row => row.EIncidentID && !row.EIncidentID.includes('EIncident'))
+            .filter(row => {
+                return row.EIncidentID && !isNaN(row.EIncidentID)
+            })
             .map(row => ({
                 wo_number: row.EIncidentID,
                 username: row.ECustomerID,
@@ -106,6 +110,10 @@ app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
                 info_description: row.RequestDescription
             }))
 
+
+        const deDuplicatingWOs = Array.from(
+            new Map(cleanedWorkorders.map(item => [String(item.wo_number), item])).values())
+
         let existingData = []
         try{
             const jsonRaw = await fs.readFile(woFilePath, `utf-8`)
@@ -113,8 +121,8 @@ app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
         } catch (error) {
             if (error.code !== 'ENOENT') throw error
         }
-        const existingWO = new Set(existingData.map(item => item.wo_number))
-        const uniqueNewWO = cleanedWorkorders.filter(record => !existingWO.has(record.wo_number))
+        const existingWO = new Set(existingData.map(item => String(item.wo_number)))
+        const uniqueNewWO = deDuplicatingWOs.filter(record => !existingWO.has(String(record.wo_number)))
 
         if(uniqueNewWO.length === 0) 
             return res.json({ message: `No new work orders found.`, added: 0})

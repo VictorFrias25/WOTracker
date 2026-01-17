@@ -1,0 +1,15 @@
+﻿txtCodeVariables,txtReportParameters
+Header/Footer Variables,"Folder: Field Ops LTE - Inbox, Filter:  Incident ID STARTS WITH , Sort:  Incident Descending"
+
+EIncidentID,ECustomerID,FirstName,LastName,EFacilityIDIncident,RoomIncident,InsertedDT,EStatusID,RequestDescription
+2145528,velass5,Selina,Velasquez-Morales,LTE,6026,01/09/26,Open,5 - Unlisted AV Request: Phone calls do not go through in classroom phone.
+2145132,crokel1,Lashonda,Croker,LTE,5-107,01/08/26,Open,"Computer, printer, scanner, etc. -- Install/Move: laserjet pro m402dne is not paired to computer."
+2145093,gonzah3,Holly,Gonzalez,LTE,7-011,01/08/26,Open,"Computer, printer, scanner, etc. -- Repair: Color Hp Printer not printing."
+2145045,bustam,Marta,Bustamante,LTE,4-002,01/08/26,Open,"Computer, printer, scanner, etc. -- Repair: Printer is not connecting."
+
+EIncidentID2,ECustomerID2,FirstName2,LastName2,EFacilityIDIncident2,RoomIncident2,InsertedDT2,EStatusID2,RequestDescription2,textbox24
+2145528,velass5,Selina,Velasquez-Morales,LTE,6026,01/09/26,Open,5 - Unlisted AV Request: Phone calls do not go through in classroom phone.,Found:  4
+2145132,crokel1,Lashonda,Croker,LTE,5-107,01/08/26,Open,"Computer, printer, scanner, etc. -- Install/Move: laserjet pro m402dne is not paired to computer.",Found:  4
+2145093,gonzah3,Holly,Gonzalez,LTE,7-011,01/08/26,Open,"Computer, printer, scanner, etc. -- Repair: Color Hp Printer not printing.",Found:  4
+2145045,bustam,Marta,Bustamante,LTE,4-002,01/08/26,Open,"Computer, printer, scanner, etc. -- Repair: Printer is not connecting.",Found:  4
+
