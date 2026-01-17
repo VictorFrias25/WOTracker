@@ -172,6 +172,9 @@ async function updateStatus(woNumber, newStatus) {
         if (response.ok) {
             console.log(`Updated ${woNumber} successfully.`)
             renderList()
+        } else {
+            const errorData = await response.json()
+            alert(`Update failed: ${errorData.error}`)
         }
     } catch (err) {
         console.error('Update error:', err)
@@ -194,7 +197,7 @@ allFilterbtn.addEventListener('click', () => {
 })
 
 uploadCSVbtn.addEventListener('click', async() => {
-    let csvFile = document.querySelector('csvImport')
+    let csvFile = document.querySelector('#csvImport')
     let formData = new FormData()
     formData.append('csvFile', csvFile.files[0])
 
@@ -204,6 +207,7 @@ uploadCSVbtn.addEventListener('click', async() => {
     })
 
     let result = await response.json()
+    renderList()
     alert(result.message)
 })
 
