@@ -132,19 +132,25 @@ let currentFilter = 'all'
 
 async function renderList() {
     try {
-        const response = await fetch('/api/wo')
+        // const response = await fetch('/api/wo')
+        // const data = await response.json()
+
+        // container.innerHTML = ''
+        // const ul = document.createElement('ul')
+
+        // const filteredData = data.filter(wo => {
+        //     if (currentFilter === 'opened') return wo.status !== 'Completed'
+        //     if (currentFilter === 'completed') return wo.status === 'Completed'
+        //     return true 
+        // })
+        const url = currentFilter === 'all'
+            ? '/api/wo'
+            : `/api/wo?status=${currentFilter}`
+        
+        const response = await fetch(url)
         const data = await response.json()
-
-        container.innerHTML = ''
-        const ul = document.createElement('ul')
-
-        const filteredData = data.filter(wo => {
-            if (currentFilter === 'opened') return wo.status !== 'Completed'
-            if (currentFilter === 'completed') return wo.status === 'Completed'
-            return true 
-        })
-
-        filteredData.forEach(wo => {
+        const container = document.createElement('ul')
+        data.forEach(wo => {
             const li = document.createElement('li')
             li.innerHTML = `
                 <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
@@ -152,10 +158,10 @@ async function renderList() {
                     ? `<button onclick="updateStatus('${wo.wo_number}', 'Completed')">Complete</button>`
                     : ''}
             `
-            ul.appendChild(li)
+            container.appendChild(li)
         })
 
-        container.appendChild(ul)
+        container.appendChild(container)
     } catch (err) {
         console.error("Render error:", err)
     }
@@ -182,12 +188,12 @@ async function updateStatus(woNumber, newStatus) {
 }
 
 openFilterBtn.addEventListener('click', () => {
-    currentFilter = 'opened'
+    currentFilter = 'Open'
     renderList()
 })
 
 completedFilterBtn.addEventListener('click', () => {
-    currentFilter = 'completed'
+    currentFilter = 'Completed'
     renderList()
 })
 

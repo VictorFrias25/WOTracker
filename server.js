@@ -19,7 +19,14 @@ const woFilePath = path.join(__dirname, './db/WODB.json')
 app.get('/api/wo', async (req, res) => {
     try{
         const data = await fs.readFile(woFilePath, 'utf-8')
-        const woJsonData = JSON.parse(data)
+        let woJsonData = JSON.parse(data)
+        const statusFilter = req.query.status ? String(req.query.status).toLowerCase() : null
+
+        if(statusFilter){
+            woJsonData = woJsonData.filter(wo => {
+                return wo.status?.toLowerCase() === statusFilter
+        })
+        }
         res.json(woJsonData)
     } catch (err) {
         console.error(`Read Error: ${err}`)
