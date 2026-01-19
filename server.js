@@ -13,21 +13,33 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, './public')))
 const woFilePath = path.join(__dirname, './db/WODB.json')
 
+let workorderJSON = []
 
+async function loadWorkorders(){
+    try{
+        const data = await fs.readFile(woFilePath, 'utf-8')
+        workorderJSON = JSON.parse(data)
+    } catch (err){
+        console.error(`Load Error: ${err}`)
+        workorderJSON = []
+    }
+}
+
+loadWorkorders()
 
 //work order list route
 app.get('/api/wo', async (req, res) => {
     try{
-        const data = await fs.readFile(woFilePath, 'utf-8')
-        let woJsonData = JSON.parse(data)
+        // const data = await fs.readFile(woFilePath, 'utf-8')
+        // let woJsonData = JSON.parse(data)
         const statusFilter = req.query.status ? String(req.query.status).toLowerCase() : null
-
+        let resultData = workorderJSON
         if(statusFilter){
-            woJsonData = woJsonData.filter(wo => {
-                return wo.status?.toLowerCase() === statusFilter
-        })
+            resultData = resultData.filter(wo =>
+                wo.status?.toLowerCase() === statusFilter
+            )
         }
-        res.json(woJsonData)
+        res.json(resultData)
     } catch (err) {
         console.error(`Read Error: ${err}`)
         res.status(500).send(`Error reading or parsing JSON data`)
@@ -37,18 +49,18 @@ app.get('/api/wo', async (req, res) => {
 
 app.put('/api/wo/:wo_number', async (req, res) => {
     try{
-        const data = await fs.readFile(woFilePath, 'utf-8')
-        let woJSONData = JSON.parse(data)
+        // const data = await fs.readFile(woFilePath, 'utf-8')
+        // let woJSONData = JSON.parse(data)
 
         const woNum = req.params.wo_number
         const updatedData = req.body
 
-        const woIndex = woJSONData.findIndex(item => item.wo_number === woNum)
+        const woIndex = workorderJSON.findIndex(item => String(item.wo_number) === String(woNum))
 
         if(woIndex !== -1){
-            woJSONData[woIndex] = { ...woJSONData[woIndex], ...updatedData}
-            await fs.writeFile(woFilePath, JSON.stringify(woJSONData, null, 2), "utf-8")
-            res.json(woJSONData[woIndex])
+            workorderJSON[woIndex] = { ...workorderJSON[woIndex], ...updatedData}
+            await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
+            res.json(workorderJSON[woIndex])
         } else {
             res.status(404).json({error: "workorder not found"})
         }
@@ -121,21 +133,21 @@ app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
         const deDuplicatingWOs = Array.from(
             new Map(cleanedWorkorders.map(item => [String(item.wo_number), item])).values())
 
-        let existingData = []
-        try{
-            const jsonRaw = await fs.readFile(woFilePath, `utf-8`)
-            existingData = JSON.parse(jsonRaw)
-        } catch (error) {
-            if (error.code !== 'ENOENT') throw error
-        }
-        const existingWO = new Set(existingData.map(item => String(item.wo_number)))
+        // let existingData = []
+        // try{
+        //     const jsonRaw = await fs.readFile(woFilePath, `utf-8`)
+        //     existingData = JSON.parse(jsonRaw)
+        // } catch (error) {
+        //     if (error.code !== 'ENOENT') throw error
+        // }
+        const existingWO = new Set(workorderJSON.map(item => String(item.wo_number)))
         const uniqueNewWO = deDuplicatingWOs.filter(record => !existingWO.has(String(record.wo_number)))
 
         if(uniqueNewWO.length === 0) 
             return res.json({ message: `No new work orders found.`, added: 0})
 
-        const updatedJSONData = existingData.concat(uniqueNewWO)
-        await fs.writeFile(woFilePath, JSON.stringify(updatedJSONData, null, 2), `utf-8`)
+        workorderJSON = workorderJSON.concat(uniqueNewWO)
+        await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), `utf-8`)
 
         res.json({
             message: `Success, added ${uniqueNewWO.length} new workorders`,

@@ -127,7 +127,7 @@ const completedFilterBtn = document.getElementById('show-completed')
 const allFilterbtn = document.getElementById('show-all')
 const uploadCSVbtn = document.getElementById('uploadCSV')
 
-let currentFilter = 'all'
+let currentFilter = 'Open'
 
 
 async function renderList() {
