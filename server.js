@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, './public')))
 const woFilePath = path.join(__dirname, './db/WODB.json')
 
-//app.get('/', (req, res) => res.send('Welcome to WOTracker. nav to /wo'))
+
 
 //work order list route
 app.get('/api/wo', async (req, res) => {

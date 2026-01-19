@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\git\\WOTracker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\WOTracker\\server.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:server.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\WOTracker\\db\\WODB.json||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:db\\WODB.json||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\WOTracker\\Scripts\\woImporter.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Scripts\\woImporter.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\WOTracker\\server.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:server.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\WOTracker\\Public\\Scripts\\script.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -27,27 +27,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "server.js",
-              "DocumentMoniker": "D:\\git\\WOTracker\\server.js",
-              "RelativeDocumentMoniker": "server.js",
-              "ToolTip": "D:\\git\\WOTracker\\server.js",
-              "RelativeToolTip": "server.js",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACQAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-01-15T00:46:53.31Z",
+              "Title": "WODB.json",
+              "DocumentMoniker": "D:\\git\\WOTracker\\db\\WODB.json",
+              "RelativeDocumentMoniker": "db\\WODB.json",
+              "ToolTip": "D:\\git\\WOTracker\\db\\WODB.json",
+              "RelativeToolTip": "db\\WODB.json",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAAAGUAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-17T02:08:20.844Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "woImporter.js",
-              "DocumentMoniker": "D:\\git\\WOTracker\\Scripts\\woImporter.js",
-              "RelativeDocumentMoniker": "Scripts\\woImporter.js",
-              "ToolTip": "D:\\git\\WOTracker\\Scripts\\woImporter.js",
-              "RelativeToolTip": "Scripts\\woImporter.js",
-              "ViewState": "AgIAAAYAAAAAAAAAAADwvy4AAAAAAAAAAAAAAA==",
+              "Title": "server.js",
+              "DocumentMoniker": "D:\\git\\WOTracker\\server.js",
+              "RelativeDocumentMoniker": "server.js",
+              "ToolTip": "D:\\git\\WOTracker\\server.js",
+              "RelativeToolTip": "server.js",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAAHwAAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-01-15T00:36:51.032Z",
+              "WhenOpened": "2026-01-15T00:46:53.31Z",
               "EditorCaption": ""
             },
             {
@@ -58,7 +58,7 @@
               "RelativeDocumentMoniker": "Public\\Scripts\\script.js",
               "ToolTip": "D:\\git\\WOTracker\\Public\\Scripts\\script.js",
               "RelativeToolTip": "Public\\Scripts\\script.js",
-              "ViewState": "AgIAADYAAAAAAAAAAAAAAKIAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAAAKkAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2026-01-14T22:47:40.526Z",
               "EditorCaption": ""

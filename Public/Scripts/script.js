@@ -149,7 +149,8 @@ async function renderList() {
         
         const response = await fetch(url)
         const data = await response.json()
-        const container = document.createElement('ul')
+        container.innerHTML = ''
+        const ul = document.createElement('ul')
         data.forEach(wo => {
             const li = document.createElement('li')
             li.innerHTML = `
@@ -158,10 +159,10 @@ async function renderList() {
                     ? `<button onclick="updateStatus('${wo.wo_number}', 'Completed')">Complete</button>`
                     : ''}
             `
-            container.appendChild(li)
+            ul.appendChild(li)
         })
 
-        container.appendChild(container)
+        container.appendChild(ul)
     } catch (err) {
         console.error("Render error:", err)
     }
