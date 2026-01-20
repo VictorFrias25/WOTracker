@@ -128,8 +128,13 @@ const allFilterbtn = document.getElementById('show-all')
 const uploadCSVbtn = document.getElementById('uploadCSV')
 
 let currentFilter = 'Open'
+let currentWOs = []
 
-
+async function loadWorkorders() {
+    const response = await fetch(`/api/wo`)
+    currentWOs = await response.json()
+    renderList()
+}
 async function renderList() {
     try {
         // const response = await fetch('/api/wo')
@@ -143,15 +148,21 @@ async function renderList() {
         //     if (currentFilter === 'completed') return wo.status === 'Completed'
         //     return true 
         // })
-        const url = currentFilter === 'all'
-            ? '/api/wo'
-            : `/api/wo?status=${currentFilter}`
+        // const url = currentFilter === 'all'
+        //     ? '/api/wo'
+        //     : `/api/wo?status=${currentFilter}`
         
-        const response = await fetch(url)
-        const data = await response.json()
+        // const response = await fetch(url)
+        // const data = await response.json()
         container.innerHTML = ''
         const ul = document.createElement('ul')
-        data.forEach(wo => {
+
+        const filteredData = currentWOs.filter(wo => {
+            if(currentFilter === 'all') return true
+            return wo.status?.toLowerCase() === currentFilter.toLowerCase()
+        })
+
+        filteredData.forEach(wo => {
             const li = document.createElement('li')
             li.innerHTML = `
                 <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
@@ -219,4 +230,5 @@ uploadCSVbtn.addEventListener('click', async() => {
 })
 
 
-renderList()
+loadWorkorders()
+// renderList()
