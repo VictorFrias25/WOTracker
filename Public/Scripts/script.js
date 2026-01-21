@@ -1,7 +1,5 @@
 const container = document.getElementById('data-container')
-const openFilterBtn = document.getElementById('show-open')
-const completedFilterBtn = document.getElementById('show-completed')
-const allFilterbtn = document.getElementById('show-all')
+const statusFilterSelect = document.getElementById('filter-open')
 const uploadCSVbtn = document.getElementById('uploadCSV')
 const totalOpenSpan = document.getElementById('total-open')
 const facilityFilterSelect = document.getElementById('filter-facility')
@@ -145,18 +143,15 @@ async function deleteWorkOrder(woNumber) {
     }
 }
 
-openFilterBtn.addEventListener('click', () => {
-    currentFilter = 'Open'
-    renderList()
-})
-
-completedFilterBtn.addEventListener('click', () => {
-    currentFilter = 'Completed'
-    renderList()
-})
-
-allFilterbtn.addEventListener('click', () => {
-    currentFilter = 'all'
+statusFilterSelect.addEventListener('change', (e) => {
+    const selectedValue = e.target.value
+    if (selectedValue === 'show-open') {
+        currentFilter = 'Open'
+    } else if (selectedValue === 'show-completed') {
+        currentFilter = 'Completed'
+    } else if (selectedValue === 'show-all') {
+        currentFilter = 'all'
+    }
     renderList()
 })
 
