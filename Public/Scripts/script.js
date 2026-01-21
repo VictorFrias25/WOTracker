@@ -189,7 +189,7 @@ async function updateStatus(woNumber, newStatus) {
 
         if (response.ok) {
             console.log(`Updated ${woNumber} successfully.`)
-            renderList()
+            await loadWorkorders()
         } else {
             const errorData = await response.json()
             alert(`Update failed: ${errorData.error}`)
@@ -225,7 +225,7 @@ uploadCSVbtn.addEventListener('click', async() => {
     })
 
     let result = await response.json()
-    renderList()
+    await loadWorkorders()
     alert(result.message)
 })
 
