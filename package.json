@@ -2,6 +2,7 @@
   "dependencies": {
     "csv-parse": "^6.1.0",
     "express": "^5.2.1",
+    "jsbarcode": "^3.12.3",
     "multer": "^2.0.2"
   },
   "name": "wotracker",

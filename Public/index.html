@@ -1,26 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    List of workorders:
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Work Order Tracker - Track and manage work orders on the go">
+    <title>Work Order Tracker</title>
+    <link rel="stylesheet" href="./Styles/styles.css">
 </head>
 <body>
-    This is the start to HTML output for this project.
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">Work Order Tracker v1</h1>
+                <p class="app-subtitle">Track and manage work orders on the go</p>
+            </div>
+        </header>
 
-    <!-- <button id="show-open">Show Open</button>
-    <button id="show-completed">Show Completed</button>
-    <button id="show-all">Show All</button> -->
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-label">Total Open</div>
+                    <div class="stat-value" id="total-open">0</div>
+                </div>
+            </div>
 
-    <label for="filter-open">Show:</label>
-    <select name="filter-open" id="filter-open">
-        <option value="show-open" id="show-open">Opened workorders</option>
-        <option value="show-completed" id="show-completed">Completed workorders</option>
-        <option value="show-all" id="show-all">All workorders</option>
-    </select>
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <div class="filter-group">
+                    <label for="filter-open" class="filter-label">Filter by Status:</label>
+                    <select name="filter-open" id="filter-open" class="filter-select">
+                        <option value="show-open" id="show-open">Open Workorders</option>
+                        <option value="show-completed" id="show-completed">Completed Workorders</option>
+                        <option value="show-all" id="show-all">All Workorders</option>
+                    </select>
+                </div>
 
-    <input type="file" id="csvImport" accept=".csv">
-    <button id="uploadCSV">CSV IMPORT</button>
+                <div class="filter-group">
+                    <label for="filter-facility" class="filter-label">Filter by Facility:</label>
+                    <select name="filter-facility" id="filter-facility" class="filter-select">
+                        <option value="all" id="facility-all">All Facilities</option>
+                        <option value="PCR" id="facility-pcr">PCR</option>
+                        <option value="LTE" id="facility-lte">LTE</option>
+                        <option value="ALI" id="facility-ali">ALI</option>
+                    </select>
+                </div>
 
-    <div id="data-container">Loading...</div>
+                <div class="import-group">
+                    <label for="csvImport" class="import-label">Import CSV:</label>
+                    <div class="import-controls">
+                        <input type="file" id="csvImport" accept=".csv" class="file-input">
+                        <button id="uploadCSV" class="btn btn-primary">Import CSV</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Orders List Section -->
+            <div class="workorders-section">
+                <div id="data-container" class="data-container">
+                    <div class="loading">Loading work orders...</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p></p>
+        </footer>
+    </div>
+
     <script src="./Scripts/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 </body>
 </html>

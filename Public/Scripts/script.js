@@ -1,182 +1,106 @@
-///*fetch('/api/wo')
-//    .then(response => response.json())
-//    .then(data => {
-//        const container = document.getElementById('data-container')
-//        container.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`
-//    })
-//    .catch(error => {
-//        console.error(`Error fetching data:`, error)
-//        document.getElementById('data-container').textContent = `Failed to load data`
-//    })*/
-//const openFilterBtn = document.getElementById('show-open')
-//const completedFilterBtn = document.getElementById('show-completed')
-//const allFilterbtn = document.getElementById('show-all')
-//let currentFilter = 'all'
-
-////function openFilter() {
-////    currentFilter == 'opened'
-////    //location.reload()
-////}
-
-////function completeFilter() {
-////    currentFilter == 'completed'
-////    //location.reload()
-////}
-
-////function allFilter() {
-////    currentFilter == 'all'
-////    //location.reload()
-////}
-
-
-//fetch('/api/wo')
-//    .then(response => response.json())
-//    .then(data => {
-//        const container = document.getElementById('data-container')
-//        container.innerHTML = ''
-
-//        const ul = document.createElement('ul')
-
-//        data.forEach(wo => {
-//            const li = document.createElement('li')
-//            li.style.marginBottom = "10px"
-
-//            //if (wo.status == 'Completed') {
-//            //    li.style.display = 'none'
-//            //} else {
-
-//            //    li.innerHTML = `
-//            //    <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
-//            //    <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
-//            //`
-//            //    ul.appendChild(li)
-//            //}
-
-//            switch (currentFilter) {
-//                case 'all':
-//                    li.innerHTML = `
-//                <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
-//                <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
-//            `
-//                    ul.appendChild(li)
-//                    break
-//                case 'opened':
-//                    if (wo.status == 'Completed') {
-//                        li.style.display = 'none'
-//                    } else {
-
-//                        li.innerHTML = `
-//                <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
-//                <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
-//            `
-//                        ul.appendChild(li)
-//                    }
-//                    break
-//                case 'completed':
-//                    if (wo.status == 'Open') {
-//                        li.style.display = 'none'
-//                    } else {
-
-//                        li.innerHTML = `
-//                <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
-//                <button onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>
-//            `
-//                        ul.appendChild(li)
-//                    }
-//                    break
-//            }
-
-//        })
-
-//        container.appendChild(ul)
-//    })
-//    .catch(error => {
-//        console.error('Error fetching data:', error)
-//        document.getElementById('data-container').textContent = 'Failed to load data'
-//    })
-
-
-
-//async function updateStatus(woNumber, newStatus) {
-//    try {
-//        const response = await fetch(`/api/wo/${woNumber}`, {
-//            method: 'PUT',
-//            headers: { 'Content-Type': 'application/json' },
-//            body: JSON.stringify({ status: newStatus })
-//        })
-
-//        if (response.ok) {
-//            alert(`Work Order ${woNumber} updated!`)
-//            location.reload()
-//        } else {
-//            alert('Failed to update work order')
-//        }
-//    } catch (err) {
-//        console.error('Update error:', err)
-//    }
-//}
-
-
-//openFilterBtn.addEventListener('click', currentFilter == 'opened')
-//completedFilterBtn.addEventListener('click', currentFilter == 'completed')
-//allFilterbtn.addEventListener('click', currentFilter == 'all')
-
 const container = document.getElementById('data-container')
 const openFilterBtn = document.getElementById('show-open')
 const completedFilterBtn = document.getElementById('show-completed')
 const allFilterbtn = document.getElementById('show-all')
 const uploadCSVbtn = document.getElementById('uploadCSV')
+const totalOpenSpan = document.getElementById('total-open')
+const facilityFilterSelect = document.getElementById('filter-facility')
 
+let totalOpenCount = 0
 let currentFilter = 'Open'
+let currentFacilityFilter = 'all'
 let currentWOs = []
 
 async function loadWorkorders() {
     const response = await fetch(`/api/wo`)
     currentWOs = await response.json()
-    renderList()
+    await updateTotalOpenCount()
+    await renderList()
+}
+async function updateTotalOpenCount() {
+    totalOpenCount = currentWOs.filter(wo => wo.status === 'Open').length
+    totalOpenSpan.textContent = totalOpenCount
 }
 async function renderList() {
     try {
-        // const response = await fetch('/api/wo')
-        // const data = await response.json()
-
-        // container.innerHTML = ''
-        // const ul = document.createElement('ul')
-
-        // const filteredData = data.filter(wo => {
-        //     if (currentFilter === 'opened') return wo.status !== 'Completed'
-        //     if (currentFilter === 'completed') return wo.status === 'Completed'
-        //     return true 
-        // })
-        // const url = currentFilter === 'all'
-        //     ? '/api/wo'
-        //     : `/api/wo?status=${currentFilter}`
-        
-        // const response = await fetch(url)
-        // const data = await response.json()
         container.innerHTML = ''
         const ul = document.createElement('ul')
 
         const filteredData = currentWOs.filter(wo => {
-            if(currentFilter === 'all') return true
-            return wo.status?.toLowerCase() === currentFilter.toLowerCase()
+            const statusMatch = currentFilter === 'all' || wo.status?.toLowerCase() === currentFilter.toLowerCase()
+            const facilityMatch = currentFacilityFilter === 'all' || wo.facility === currentFacilityFilter
+            return statusMatch && facilityMatch
+        })
+
+        filteredData.sort((a, b) => {
+            return parseInt(a.wo_number) - parseInt(b.wo_number)
         })
 
         filteredData.forEach(wo => {
-            const li = document.createElement('li')
-            li.innerHTML = `
-                <strong>WO #${wo.wo_number}</strong> - Facility ${wo.facility} - Room ${wo.room} Opened by: ${wo.first_name} ${wo.last_name} - Description: ${wo.info_description} - Status: <span>${wo.status}</span>
-                ${wo.status !== 'Completed'
-                    ? `<button onclick="updateStatus('${wo.wo_number}', 'Completed')">Complete</button>`
-                    : ''}
-            `
+            const li = createWorkOrderElement(wo)
             ul.appendChild(li)
         })
 
         container.appendChild(ul)
+
+        filteredData.forEach(wo => {
+            if (wo.status === 'Completed') {
+                JsBarcode(`#barcode-${wo.wo_number}`, wo.wo_number, {
+                    format: "CODE128",
+                    width: 2,
+                    height: 50,
+                    displayValue: false,
+                    lineColor: "#ffffff",
+                    background: "#1e293b"
+                })
+            }
+        })
     } catch (err) {
         console.error("Render error:", err)
     }
+}
+
+function createWorkOrderElement(wo) {
+    const li = document.createElement('li')
+    li.innerHTML = `
+        <div class="wo-header">
+            <strong>WO #${wo.wo_number}</strong>
+            <span class="wo-status ${wo.status === 'Completed' ? 'status-completed' : 'status-open'}">${wo.status}</span>
+        </div>
+        <div class="wo-details">
+            <div class="wo-detail-item">
+                <span class="detail-label">Facility:</span>
+                <span class="detail-value">${wo.facility}</span>
+            </div>
+            <div class="wo-detail-item">
+                <span class="detail-label">Room:</span>
+                <span class="detail-value">${wo.room}</span>
+            </div>
+            <div class="wo-detail-item">
+                <span class="detail-label">Opened by:</span>
+                <span class="detail-value">${wo.first_name} ${wo.last_name}</span>
+            </div>
+            <div class="wo-detail-item">
+                <span class="detail-label">Date Opened:</span>
+                <span class="detail-value">${wo.date_opened}</span>
+            </div>
+        </div>
+        <div class="wo-description">
+            <span class="detail-label">Description:</span>
+            <p>${wo.info_description}</p>
+        </div>
+        ${wo.status === 'Completed' ? `
+        <div class="wo-barcode">
+            <svg id="barcode-${wo.wo_number}"></svg>
+        </div>
+        ` : ''}
+        <div class="wo-actions">
+            ${wo.status !== 'Completed'
+                ? `<button class="btn btn-success" onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>`
+                : `<button class="btn btn-danger" onclick="deleteWorkOrder('${wo.wo_number}')">Remove</button>`}
+        </div>
+    `
+    return li
 }
 
 async function updateStatus(woNumber, newStatus) {
@@ -199,6 +123,28 @@ async function updateStatus(woNumber, newStatus) {
     }
 }
 
+async function deleteWorkOrder(woNumber) {
+    if (confirm(`Are you sure you want to remove work order ${woNumber}? This action cannot be undone.`)) {
+        try {
+            const response = await fetch(`/api/wo/${woNumber}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            })
+
+            if (response.ok) {
+                console.log(`Deleted ${woNumber} successfully.`)
+                await loadWorkorders()
+            } else {
+                const errorData = await response.json()
+                alert(`Delete failed: ${errorData.error}`)
+            }
+        } catch (err) {
+            console.error('Delete error:', err)
+            alert('Failed to delete work order')
+        }
+    }
+}
+
 openFilterBtn.addEventListener('click', () => {
     currentFilter = 'Open'
     renderList()
@@ -211,6 +157,11 @@ completedFilterBtn.addEventListener('click', () => {
 
 allFilterbtn.addEventListener('click', () => {
     currentFilter = 'all'
+    renderList()
+})
+
+facilityFilterSelect.addEventListener('change', (e) => {
+    currentFacilityFilter = e.target.value
     renderList()
 })
 
@@ -231,4 +182,3 @@ uploadCSVbtn.addEventListener('click', async() => {
 
 
 loadWorkorders()
-// renderList()
