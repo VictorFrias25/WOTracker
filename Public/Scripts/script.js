@@ -27,7 +27,8 @@ async function renderList() {
         const filteredData = currentWOs.filter(wo => {
             const statusMatch = currentFilter === 'all' || wo.status?.toLowerCase() === currentFilter.toLowerCase()
             const facilityMatch = currentFacilityFilter === 'all' || wo.facility === currentFacilityFilter
-            return statusMatch && facilityMatch
+            const notArchived = wo.status?.toLowerCase() !== 'archived'
+            return statusMatch && facilityMatch && notArchived
         })
 
         filteredData.sort((a, b) => {
@@ -95,7 +96,7 @@ function createWorkOrderElement(wo) {
         <div class="wo-actions">
             ${wo.status !== 'Completed'
                 ? `<button class="btn btn-success" onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>`
-                : `<button class="btn btn-danger" onclick="deleteWorkOrder('${wo.wo_number}')">Remove</button>`}
+                : `<button class="btn btn-danger" onclick="updateStatus('${wo.wo_number}', 'Archived')">Archive</button>`}
         </div>
     `
     return li
@@ -121,27 +122,27 @@ async function updateStatus(woNumber, newStatus) {
     }
 }
 
-async function deleteWorkOrder(woNumber) {
-    if (confirm(`Are you sure you want to remove work order ${woNumber}? This action cannot be undone.`)) {
-        try {
-            const response = await fetch(`/api/wo/${woNumber}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
-            })
+// async function deleteWorkOrder(woNumber) {
+//     if (confirm(`Are you sure you want to remove work order ${woNumber}? This action cannot be undone.`)) {
+//         try {
+//             const response = await fetch(`/api/wo/${woNumber}`, {
+//                 method: 'DELETE',
+//                 headers: { 'Content-Type': 'application/json' }
+//             })
 
-            if (response.ok) {
-                console.log(`Deleted ${woNumber} successfully.`)
-                await loadWorkorders()
-            } else {
-                const errorData = await response.json()
-                alert(`Delete failed: ${errorData.error}`)
-            }
-        } catch (err) {
-            console.error('Delete error:', err)
-            alert('Failed to delete work order')
-        }
-    }
-}
+//             if (response.ok) {
+//                 console.log(`Deleted ${woNumber} successfully.`)
+//                 await loadWorkorders()
+//             } else {
+//                 const errorData = await response.json()
+//                 alert(`Delete failed: ${errorData.error}`)
+//             }
+//         } catch (err) {
+//             console.error('Delete error:', err)
+//             alert('Failed to delete work order')
+//         }
+//     }
+// }
 
 statusFilterSelect.addEventListener('change', (e) => {
     const selectedValue = e.target.value
