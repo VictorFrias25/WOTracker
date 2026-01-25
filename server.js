@@ -47,7 +47,7 @@ app.get('/api/wo', async (req, res) => {
 }
 )   
 
-app.put('/api/wo/:wo_number/complete', async (req, res) => {
+app.post('/api/wo/:wo_number/complete', async (req, res) => {
     try{
         // const data = await fs.readFile(woFilePath, 'utf-8')
         // let woJSONData = JSON.parse(data)
@@ -68,6 +68,24 @@ app.put('/api/wo/:wo_number/complete', async (req, res) => {
             res.status(404).json({error: "workorder not found"})
         }
     } catch (err){
+        console.error(`Update Error: ${err}`)
+        res.status(500).send(`Error updating workorder`)
+    }
+})
+
+app.post('/api/wo/:wo_number/archive', async (req, res) => {
+    try{
+        const woNum = req.params.wo_number
+        const woIndex = workorderJSON.findIndex(item => String(item.wo_number) === String(woNum))
+
+        if(woIndex !== -1){
+            workorderJSON[woIndex].status = 'Archived'
+            await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
+            res.json(workorderJSON[woIndex])
+        } else {
+            res.status(404).json({error: "workorder not found"})
+        }
+} catch (err){
         console.error(`Update Error: ${err}`)
         res.status(500).send(`Error updating workorder`)
     }

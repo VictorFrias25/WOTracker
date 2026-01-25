@@ -95,8 +95,8 @@ function createWorkOrderElement(wo) {
         ` : ''}
         <div class="wo-actions">
             ${wo.status !== 'Completed'
-                ? `<button class="btn btn-success" onclick="updateStatus('${wo.wo_number}', 'Completed')">Mark Completed</button>`
-                : `<button class="btn btn-danger" onclick="updateStatus('${wo.wo_number}', 'Archived')">Archive</button>`}
+                ? `<button class="btn btn-success" onclick="completeWorkOrder('${wo.wo_number}')">Mark Completed</button>`
+                : `<button class="btn btn-danger" onclick="archiveWorkOrder('${wo.wo_number}')">Archive</button>`}
         </div>
     `
     return li
@@ -119,6 +119,40 @@ async function updateStatus(woNumber, newStatus) {
         }
     } catch (err) {
         console.error('Update error:', err)
+    }
+}
+
+async function completeWorkOrder(woNumber) {
+    try{
+        const res = await fetch(`/api/wo/${woNumber}/complete`, {
+        method: 'POST'
+        })
+        if (res.ok) {
+            console.log(`Work order ${woNumber} marked as completed.`)
+            await loadWorkorders()
+        } else {
+            const errorData = await res.json()
+            alert(`Completion failed: ${errorData.error}`)
+        }
+    } catch (err){
+        console.error('Complete error:', err)
+    }
+}
+
+async function archiveWorkOrder(woNumber) {
+    try{
+        const res = await fetch(`/api/wo/${woNumber}/archive`, {
+        method: 'POST'
+        })
+        if (res.ok) {
+            console.log(`Work order ${woNumber} archived.`)
+            await loadWorkorders()
+        } else {
+            const errorData = await res.json()
+            alert(`Archive failed: ${errorData.error}`)
+        }
+    } catch (err){
+        console.error('Archive error:', err)
     }
 }
 
