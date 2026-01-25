@@ -47,18 +47,21 @@ app.get('/api/wo', async (req, res) => {
 }
 )   
 
-app.put('/api/wo/:wo_number', async (req, res) => {
+app.put('/api/wo/:wo_number/complete', async (req, res) => {
     try{
         // const data = await fs.readFile(woFilePath, 'utf-8')
         // let woJSONData = JSON.parse(data)
 
         const woNum = req.params.wo_number
-        const updatedData = req.body
+        //const updatedData = req.body
 
         const woIndex = workorderJSON.findIndex(item => String(item.wo_number) === String(woNum))
 
         if(woIndex !== -1){
-            workorderJSON[woIndex] = { ...workorderJSON[woIndex], ...updatedData}
+            //workorderJSON[woIndex] = { ...workorderJSON[woIndex], ...updatedData}
+            //await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
+            workorderJSON[woIndex].status = 'Completed'
+            workorderJSON[woIndex].date_completed = new Date().toISOString()
             await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
             res.json(workorderJSON[woIndex])
         } else {
