@@ -77,51 +77,6 @@ app.post('/api/wo/:wo_number/archive', async (req, res) => {
     }
 })
 
-// app.delete('/api/wo/:wo_number', async (req, res) => {
-//     try{
-//         const woNum = req.params.wo_number
-//         const woIndex = workorderJSON.findIndex(item => String(item.wo_number) === String(woNum))
-
-//         if(woIndex !== -1){
-//             const deletedWO = workorderJSON.splice(woIndex, 1)
-//             await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
-//             res.json({message: `Work order ${woNum} deleted successfully`, deleted: deletedWO[0]})
-//         } else {
-//             res.status(404).json({error: "workorder not found"})
-//         }
-//     } catch (err){
-//         console.error(`Delete Error: ${err}`)
-//         res.status(500).send(`Error deleting workorder`)
-//     }
-// })
-
-//work order status change route
-// app.put('/api/wo/:wo_number', (req, res) => {
-//     fs.readFile(woFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//             console.error(err)
-//             return res.status(500).send(`Error reading file`)
-//         }
-//         try {
-//             const woJsonData = JSON.parse(data)
-//             const woNum = req.params.wo_number
-//             const updatedData = req.body
-
-//             const woIndex = woJsonData.findIndex(item => item.wo_number === woNum)
-
-//             if (woIndex !== -1) {
-//                 woJsonData[woIndex] = { ...woJsonData[woIndex], ...updatedData }
-//                 fs.writeFileSync(woFilePath, JSON.stringify(woJsonData, null, 2))
-//                 res.json(woJsonData[woIndex])
-//             } else {
-//                 res.status(404).json({ error: `Work order not found` })
-//             }
-//         } catch (parseErr) {
-//             console.error(parseErr)
-//             res.status(500).send(`Error parsing JSON data`)
-//         }
-//     })
-// })
 
 app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
     try{

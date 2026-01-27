@@ -13,7 +13,12 @@ CREATE TABLE IF NOT EXISTS workorders (
     status TEXT,
     info_description TEXT,
     date_completed TEXT DEFAULT NULL,
-    technician TEXT DEFAULT NULL
+    technician_id INTEGER DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS technicians (
+    id INTEGER PRIMARY KEY,
+    username TEXT UNIQUE
 );
 `)
 

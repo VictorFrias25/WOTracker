@@ -1,0 +1,58 @@
+txtCodeVariables,txtReportParameters
+Header/Footer Variables,"Folder: Field Ops SHS - Inbox, Filter:  Incident ID STARTS WITH , Sort:  Incident Ascending"
+
+EIncidentID,ECustomerID,FirstName,LastName,EFacilityIDIncident,RoomIncident,InsertedDT,EStatusID,RequestDescription
+3001245,gokuson,Kakarot,Son,SHS,1-101,01/01/26,Open,"Equipment - Scouter: Scouter device won't turn on. Has been dropped multiple times during training."
+3001456,vegprin,Vegeta,Prince,SHS,2-205,01/02/26,Open,"Equipment - Gravity Room: Gravity chamber is stuck at 500x Earth normal gravity. Teacher cannot adjust settings."
+3001678,gohanson,Gohan,Son,SHS,3-301,01/03/26,Open,"Computer, printer, scanner, etc. -- Repair: Laptop screen keeps flickering. Started after the energy blast training session."
+3001892,gotenson,Goten,Son,SHS,1-102,01/04/26,Open,"Equipment - Scouter: Scouter battery is dead. Need replacement battery pack for power level readings."
+3002134,trunksbr,Trunks,Briefs,SHS,2-206,01/05/26,Open,"Equipment - Time Chamber: Door lock is jammed. Students cannot exit the hyperbolic time chamber after training."
+3002567,krilsun,Krillin,Sun,SHS,1-103,01/07/26,Open,"Equipment - Scouter: Display screen on scouter is cracked. Power levels cannot be read accurately."
+3002789,yamchaw,Yamcha,Wanderer,SHS,3-302,01/08/26,Open,"Communication Equipment: Capsule vehicle radio is not transmitting. Cannot contact training teams in the field."
+3002901,rosmaster,Master,Roshi,SHS,5-501,01/09/26,Open,"Computer, printer, scanner, etc. -- Repair: Desktop computer keeps overheating. Air conditioning unit is not keeping up with equipment demands."
+3003123,tienmast,Tien,Master,SHS,3-303,01/10/26,Open,"Equipment - Gravity Room: Emergency exit button is unresponsive. Safety concern for trainers inside."
+3003345,chiaohen,Chiaotzu,Hen,SHS,2-207,01/11/26,Open,"Networking Equipment: Internet connection drops every hour. Wi-Fi extender may be failing."
+3003567,android17,Android,Seventeen,SHS,4-402,01/12/26,Open,"Equipment - Energy Meter: Energy detection device is showing false readings. Calibration needed."
+3003912,piccolonam,Piccolo,Namekian,SHS,5-502,01/14/26,Open,"Equipment - Scouter: Multiple units not syncing with central database. Cannot update power level readings."
+3004134,cellperfect,Cell,Perfect,SHS,6-601,01/15/26,Open,"Computer, printer, scanner, etc. -- Repair: Monitor is displaying in monochrome. Color settings reset unexpectedly."
+3004578,uubhumanh,Uub,Humanhybrid,SHS,1-104,01/17/26,Open,"Equipment - Scouter: Audio feedback speaker is blown out. Silent mode only on all units."
+3004789,gohanson,Gohan,Son,SHS,4-404,01/18/26,Open,"Computer, printer, scanner, etc. -- Install/Move: Printer will not communicate with network. Cannot print training schedules."
+3005123,jirenfan,Jiren,Fan,SHS,6-602,01/20/26,Open,"Computer, printer, scanner, etc. -- Repair: Desktop tower making loud grinding noise. Hard drive may be failing."
+3005345,hitassin,Hit,Assassin,SHS,4-404,01/21/26,Open,"Equipment - Scouter: Device keeps resetting to factory settings. Memory card may be corrupted."
+3005567,vegprin,Vegeta,Prince,SHS,2-210,01/21/26,Open,"Networking Equipment: VPN connection failing for remote training sessions. Cannot access central server."
+3005789,zamasu,Zamasu,Divine,SHS,1-105,01/23/26,Open,"Computer, printer, scanner, etc. -- Repair: Laptop randomly shuts down during long training simulations."
+3005901,broly,Broly,Legendary,SHS,3-305,01/24/26,Open,"Equipment - Gravity Room: Power supply is unstable. Gravity levels fluctuate between 100x and 1000x Earth normal."
+3006123,frieza,Frieza,Emperor,SHS,5-504,01/25/26,Open,"Computer, printer, scanner, etc. -- Install/Move: Scanner not recognizing documents. Calibration needed for power level charts."
+3006245,krilsun,Krillin,Sun,SHS,3-306,01/25/26,Open,"Computer, printer, scanner, etc. -- Repair: Printer paper jam error won't clear. Sensor may need replacement."
+3006345,raditz,Raditz,Saiyan,SHS,6-603,01/26/26,Open,"Equipment - Scouter: Unit is overheating after 30 minutes of use. Cooling fan damaged."
+3006456,gokuson,Kakarot,Son,SHS,2-211,01/26/26,Open,"Computer, printer, scanner, etc. -- Repair: USB ports on desktop not recognizing flash drives. Driver issue suspected."
+3006567,nappa,Nappa,Saiyan,SHS,4-405,01/27/26,Open,"Computer, printer, scanner, etc. -- Repair: Mouse cursor jumps around randomly. Input device unresponsive."
+3006678,rosmaster,Master,Roshi,SHS,1-106,01/27/26,Open,"Equipment - Time Chamber: Air filtration system making squealing noise. May need maintenance."
+
+EIncidentID2,ECustomerID2,FirstName2,LastName2,EFacilityIDIncident2,RoomIncident2,InsertedDT2,EStatusID2,RequestDescription2,textbox24
+3001245,gokuson,Kakarot,Son,SHS,1-101,01/01/26,Open,"Equipment - Scouter: Scouter device won't turn on. Has been dropped multiple times during training.",Found:  25
+3001456,vegprin,Vegeta,Prince,SHS,2-205,01/02/26,Open,"Equipment - Gravity Room: Gravity chamber is stuck at 500x Earth normal gravity. Teacher cannot adjust settings.",Found:  25
+3001678,gohanson,Gohan,Son,SHS,3-301,01/03/26,Open,"Computer, printer, scanner, etc. -- Repair: Laptop screen keeps flickering. Started after the energy blast training session.",Found:  25
+3001892,gotenson,Goten,Son,SHS,1-102,01/04/26,Open,"Equipment - Scouter: Scouter battery is dead. Need replacement battery pack for power level readings.",Found:  25
+3002134,trunksbr,Trunks,Briefs,SHS,2-206,01/05/26,Open,"Equipment - Time Chamber: Door lock is jammed. Students cannot exit the hyperbolic time chamber after training.",Found:  25
+3002567,krilsun,Krillin,Sun,SHS,1-103,01/07/26,Open,"Equipment - Scouter: Display screen on scouter is cracked. Power levels cannot be read accurately.",Found:  25
+3002789,yamchaw,Yamcha,Wanderer,SHS,3-302,01/08/26,Open,"Communication Equipment: Capsule vehicle radio is not transmitting. Cannot contact training teams in the field.",Found:  25
+3002901,rosmaster,Master,Roshi,SHS,5-501,01/09/26,Open,"Computer, printer, scanner, etc. -- Repair: Desktop computer keeps overheating. Air conditioning unit is not keeping up with equipment demands.",Found:  25
+3003123,tienmast,Tien,Master,SHS,3-303,01/10/26,Open,"Equipment - Gravity Room: Emergency exit button is unresponsive. Safety concern for trainers inside.",Found:  25
+3003345,chiaohen,Chiaotzu,Hen,SHS,2-207,01/11/26,Open,"Networking Equipment: Internet connection drops every hour. Wi-Fi extender may be failing.",Found:  25
+3003567,android17,Android,Seventeen,SHS,4-402,01/12/26,Open,"Equipment - Energy Meter: Energy detection device is showing false readings. Calibration needed.",Found:  25
+3003912,piccolonam,Piccolo,Namekian,SHS,5-502,01/14/26,Open,"Equipment - Scouter: Multiple units not syncing with central database. Cannot update power level readings.",Found:  25
+3004134,cellperfect,Cell,Perfect,SHS,6-601,01/15/26,Open,"Computer, printer, scanner, etc. -- Repair: Monitor is displaying in monochrome. Color settings reset unexpectedly.",Found:  25
+3004578,uubhumanh,Uub,Humanhybrid,SHS,1-104,01/17/26,Open,"Equipment - Scouter: Audio feedback speaker is blown out. Silent mode only on all units.",Found:  25
+3004789,gohanson,Gohan,Son,SHS,4-404,01/18/26,Open,"Computer, printer, scanner, etc. -- Install/Move: Printer will not communicate with network. Cannot print training schedules.",Found:  25
+3005123,jirenfan,Jiren,Fan,SHS,6-602,01/20/26,Open,"Computer, printer, scanner, etc. -- Repair: Desktop tower making loud grinding noise. Hard drive may be failing.",Found:  25
+3005345,hitassin,Hit,Assassin,SHS,4-404,01/21/26,Open,"Equipment - Scouter: Device keeps resetting to factory settings. Memory card may be corrupted.",Found:  25
+3005567,vegprin,Vegeta,Prince,SHS,2-210,01/21/26,Open,"Networking Equipment: VPN connection failing for remote training sessions. Cannot access central server.",Found:  25
+3005789,zamasu,Zamasu,Divine,SHS,1-105,01/23/26,Open,"Computer, printer, scanner, etc. -- Repair: Laptop randomly shuts down during long training simulations.",Found:  25
+3005901,broly,Broly,Legendary,SHS,3-305,01/24/26,Open,"Equipment - Gravity Room: Power supply is unstable. Gravity levels fluctuate between 100x and 1000x Earth normal.",Found:  25
+3006123,frieza,Frieza,Emperor,SHS,5-504,01/25/26,Open,"Computer, printer, scanner, etc. -- Install/Move: Scanner not recognizing documents. Calibration needed for power level charts.",Found:  25
+3006245,krilsun,Krillin,Sun,SHS,3-306,01/25/26,Open,"Computer, printer, scanner, etc. -- Repair: Printer paper jam error won't clear. Sensor may need replacement.",Found:  25
+3006345,raditz,Raditz,Saiyan,SHS,6-603,01/26/26,Open,"Equipment - Scouter: Unit is overheating after 30 minutes of use. Cooling fan damaged.",Found:  25
+3006456,gokuson,Kakarot,Son,SHS,2-211,01/26/26,Open,"Computer, printer, scanner, etc. -- Repair: USB ports on desktop not recognizing flash drives. Driver issue suspected.",Found:  25
+3006567,nappa,Nappa,Saiyan,SHS,4-405,01/27/26,Open,"Computer, printer, scanner, etc. -- Repair: Mouse cursor jumps around randomly. Input device unresponsive.",Found:  25
+3006678,rosmaster,Master,Roshi,SHS,1-106,01/27/26,Open,"Equipment - Time Chamber: Air filtration system making squealing noise. May need maintenance.",Found:  25
