@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs').promises
 const multer = require('multer')
 const {parse} = require('csv-parse/sync')
+const db = require('./db')
 const { error } = require('console')
 
 const app = express()
@@ -11,62 +12,47 @@ const memStorage = multer.memoryStorage()
 const upload = multer({ storage: memStorage })
 app.use(express.json())
 app.use(express.static(path.join(__dirname, './public')))
-const woFilePath = path.join(__dirname, './db/WODB.json')
+//const woFilePath = path.join(__dirname, './db/WODB.json')
 
-let workorderJSON = []
+// let workorderJSON = []
 
-async function loadWorkorders(){
-    try{
-        const data = await fs.readFile(woFilePath, 'utf-8')
-        workorderJSON = JSON.parse(data)
-    } catch (err){
-        console.error(`Load Error: ${err}`)
-        workorderJSON = []
-    }
-}
+// async function loadWorkorders(){
+//     try{
+//         const data = await fs.readFile(woFilePath, 'utf-8')
+//         workorderJSON = JSON.parse(data)
+//     } catch (err){
+//         console.error(`Load Error: ${err}`)
+//         workorderJSON = []
+//     }
+// }
 
-loadWorkorders()
+// loadWorkorders()
 
 //work order list route
 app.get('/api/wo', async (req, res) => {
     try{
-        // const data = await fs.readFile(woFilePath, 'utf-8')
-        // let woJsonData = JSON.parse(data)
-        const statusFilter = req.query.status ? String(req.query.status).toLowerCase() : null
-        let resultData = workorderJSON
-        if(statusFilter){
-            resultData = resultData.filter(wo =>
-                wo.status?.toLowerCase() === statusFilter
-            )
-        }
-        res.json(resultData)
-    } catch (err) {
-        console.error(`Read Error: ${err}`)
-        res.status(500).send(`Error reading or parsing JSON data`)
+        const stmt = db.prepare('SELECT * FROM workorders')
+        const workorders = stmt.all()
+        res.json(workorders)
+    } catch (err){
+        console.error(`DB Fetch Error: ${err}`)
+        res.status(500).send(`Error fetching workorders from database`)
     }
-}
-)   
+})
 
 app.post('/api/wo/:wo_number/complete', async (req, res) => {
+    const woNum = req.params.wo_number
+    const now = new Date().toISOString()
     try{
-        // const data = await fs.readFile(woFilePath, 'utf-8')
-        // let woJSONData = JSON.parse(data)
-
-        const woNum = req.params.wo_number
-        //const updatedData = req.body
-
-        const woIndex = workorderJSON.findIndex(item => String(item.wo_number) === String(woNum))
-
-        if(woIndex !== -1){
-            //workorderJSON[woIndex] = { ...workorderJSON[woIndex], ...updatedData}
-            //await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
-            workorderJSON[woIndex].status = 'Completed'
-            workorderJSON[woIndex].date_completed = new Date().toISOString()
-            await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
-            res.json(workorderJSON[woIndex])
-        } else {
+        const info = db.prepare(`
+            UPDATE workorders
+            SET status = ?, date_completed = ?
+            WHERE wo_number = ?
+        `).run('Completed', now, woNum)
+        if(info.changes > 0)
+            res.sendStatus(200)
+        else
             res.status(404).json({error: "workorder not found"})
-        }
     } catch (err){
         console.error(`Update Error: ${err}`)
         res.status(500).send(`Error updating workorder`)
@@ -74,18 +60,18 @@ app.post('/api/wo/:wo_number/complete', async (req, res) => {
 })
 
 app.post('/api/wo/:wo_number/archive', async (req, res) => {
+    const woNum = req.params.wo_number
     try{
-        const woNum = req.params.wo_number
-        const woIndex = workorderJSON.findIndex(item => String(item.wo_number) === String(woNum))
-
-        if(woIndex !== -1){
-            workorderJSON[woIndex].status = 'Archived'
-            await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), "utf-8")
-            res.json(workorderJSON[woIndex])
-        } else {
+        const info = db.prepare(`
+            UPDATE workorders
+            SET status = ?
+            WHERE wo_number = ?
+        `).run('Archived', woNum)
+        if(info.changes > 0)
+            res.sendStatus(200)
+        else
             res.status(404).json({error: "workorder not found"})
-        }
-} catch (err){
+    } catch (err){
         console.error(`Update Error: ${err}`)
         res.status(500).send(`Error updating workorder`)
     }
@@ -169,32 +155,28 @@ app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
             }))
 
 
-        const deDuplicatingWOs = Array.from(
-            new Map(cleanedWorkorders.map(item => [String(item.wo_number), item])).values())
+        const insert = db.prepare(`
+            INSERT OR IGNORE INTO workorders (
+                wo_number, username, first_name, last_name,
+                facility, room, date_opened, status, info_description
+                ) VALUES ( 
+                @wo_number, @username, @first_name, @last_name,
+                @facility, @room, @date_opened, @status, @info_description 
+                )
+            `)
 
-        // let existingData = []
-        // try{
-        //     const jsonRaw = await fs.readFile(woFilePath, `utf-8`)
-        //     existingData = JSON.parse(jsonRaw)
-        // } catch (error) {
-        //     if (error.code !== 'ENOENT') throw error
-        // }
-        const existingWO = new Set(workorderJSON.map(item => String(item.wo_number)))
-        const uniqueNewWO = deDuplicatingWOs.filter(record => !existingWO.has(String(record.wo_number)))
+            let addedCount = 0
+            const insertMany = db.transaction((workorders) => {
+                for (const wo of workorders) {
+                    const info = insert.run(wo)
+                    if(info.changes > 0)
+                        addedCount++
+                }
+            })
+            insertMany(cleanedWorkorders)
 
-        if(uniqueNewWO.length === 0) 
-            return res.json({ message: `No new work orders found.`, added: 0})
-
-        workorderJSON = workorderJSON.concat(uniqueNewWO)
-        await fs.writeFile(woFilePath, JSON.stringify(workorderJSON, null, 2), `utf-8`)
-
-        res.json({
-            message: `Success, added ${uniqueNewWO.length} new workorders`,
-            stats: {
-                recieved: cleanedWorkorders.length,
-                added: uniqueNewWO.length,
-                ignored: cleanedWorkorders.length - uniqueNewWO.length
-            }
+        res.json({ message: `Import complete. ${addedCount} new workorders added.`, 
+        stats: { totalProcessed: cleanedWorkorders.length, totalAdded: addedCount, ignored: cleanedWorkorders.length - addedCount }
         })
     } catch (err) {
         console.error(err)
