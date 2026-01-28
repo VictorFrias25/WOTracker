@@ -1,6 +1,7 @@
 # Database
 WODB.json
 workorders.db
+/db
 *.db
 *.sqlite
 *.sqlite3
