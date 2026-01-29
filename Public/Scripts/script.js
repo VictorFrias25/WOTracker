@@ -1,4 +1,5 @@
 const container = document.getElementById('data-container')
+const filterContainer = document.getElementById('facility-filter-group')
 const statusFilterSelect = document.getElementById('filter-open')
 const uploadCSVbtn = document.getElementById('uploadCSV')
 const totalOpenSpan = document.getElementById('total-open')
@@ -13,6 +14,7 @@ async function loadWorkorders() {
     const response = await fetch(`/api/wo`)
     currentWOs = await response.json()
     await updateTotalOpenCount()
+    await facilityFilterSelectOptions([...new Set(currentWOs.map(wo => wo.facility))])
     await renderList()
 }
 async function updateTotalOpenCount() {
@@ -100,6 +102,20 @@ function createWorkOrderElement(wo) {
         </div>
     `
     return li
+}
+
+function facilityFilterSelectOptions(facilities) {
+    const allOption = document.createElement('option')
+    allOption.value = 'all'
+    allOption.textContent = 'All Facilities'
+    facilityFilterSelect.appendChild(allOption)
+    
+    facilities.forEach(facility => {
+        const option = document.createElement('option')
+        option.value = facility
+        option.textContent = facility
+        facilityFilterSelect.appendChild(option)
+    })
 }
 
 async function updateStatus(woNumber, newStatus) {
