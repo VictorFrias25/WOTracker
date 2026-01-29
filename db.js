@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS workorders (
 
 CREATE TABLE IF NOT EXISTS technicians (
     id INTEGER PRIMARY KEY,
-    username TEXT UNIQUE
+    username TEXT UNIQUE,
+    password_hash TEXT
 );
 `)
 

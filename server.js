@@ -5,6 +5,7 @@ const multer = require('multer')
 const {parse} = require('csv-parse/sync')
 const db = require('./db')
 const { error } = require('console')
+const session = require('express-session')
 
 const app = express()
 const port = 3001
@@ -12,23 +13,15 @@ const memStorage = multer.memoryStorage()
 const upload = multer({ storage: memStorage })
 app.use(express.json())
 app.use(express.static(path.join(__dirname, './public')))
-//const woFilePath = path.join(__dirname, './db/WODB.json')
+app.use(session({
+    secret: `replace-this-with-a-secure-random-string`,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+    }
+}))
 
-// let workorderJSON = []
-
-// async function loadWorkorders(){
-//     try{
-//         const data = await fs.readFile(woFilePath, 'utf-8')
-//         workorderJSON = JSON.parse(data)
-//     } catch (err){
-//         console.error(`Load Error: ${err}`)
-//         workorderJSON = []
-//     }
-// }
-
-// loadWorkorders()
-
-//work order list route
 app.get('/api/wo', async (req, res) => {
     try{
         const stmt = db.prepare('SELECT * FROM workorders')
