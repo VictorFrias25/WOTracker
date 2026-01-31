@@ -22,7 +22,56 @@ app.use(session({
     }
 }))
 
-app.get('/api/wo', async (req, res) => {
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body
+    const stmt = db.prepare('SELECT * FROM users WHERE username = ?')
+    const technician = stmt.get(username)
+
+    if(!technician){
+        return res.status(401).json({ error: 'Invalid username or password' }) //Later add prompt to create account
+    }
+
+    const isPasswordValid = bcrypt.compareSync(password, technician.password_hash)
+    if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid username or password' })
+    }
+
+    req.session.technician = {
+        id: technician.id,
+        username: technician.username
+    }
+    res.json({ 
+        message: 'Login successful',
+        success: true,
+        id: technician.id,
+        username: technician.username
+    })
+})
+
+app.post('/api/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ error: 'Logout failed' })
+        }
+        res.clearCookie('connect.sid')
+        res.json({ message: 'Logout successful' })
+    })
+})
+
+function isAuthenticated(req, res, next){
+    if(!req.session.technician)
+        return res.status(401).json({ error: 'Unauthorized' })
+    next()
+}
+
+app.get('/api/me', isAuthenticated, async (req, res) => {
+    res.json({
+        id: req.session.technician.id,
+        username: req.session.technician.username
+    })
+})
+
+app.get('/api/wo', isAuthenticated, async (req, res) => {
     try{
         const stmt = db.prepare('SELECT * FROM workorders')
         const workorders = stmt.all()
@@ -33,7 +82,7 @@ app.get('/api/wo', async (req, res) => {
     }
 })
 
-app.post('/api/wo/:wo_number/complete', async (req, res) => {
+app.post('/api/wo/:wo_number/complete', isAuthenticated, async (req, res) => {
     const woNum = req.params.wo_number
     const now = new Date().toISOString()
     try{
@@ -52,7 +101,7 @@ app.post('/api/wo/:wo_number/complete', async (req, res) => {
     }
 })
 
-app.post('/api/wo/:wo_number/archive', async (req, res) => {
+app.post('/api/wo/:wo_number/archive', isAuthenticated, async (req, res) => {
     const woNum = req.params.wo_number
     try{
         const info = db.prepare(`
@@ -71,7 +120,7 @@ app.post('/api/wo/:wo_number/archive', async (req, res) => {
 })
 
 
-app.post('/api/importWOCSV', upload.single('csvFile'), async (req, res) => {
+app.post('/api/importWOCSV', isAuthenticated, upload.single('csvFile'), async (req, res) => {
     try{
         if (!req.file)
          return res.status(400).send(`No  file uploaded.`)
