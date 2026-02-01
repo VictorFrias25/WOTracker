@@ -6,6 +6,7 @@ const {parse} = require('csv-parse/sync')
 const db = require('./db')
 const { error } = require('console')
 const session = require('express-session')
+const bcrypt = require('bcrypt')
 
 const app = express()
 const port = 3001
@@ -24,7 +25,7 @@ app.use(session({
 
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body
-    const stmt = db.prepare('SELECT * FROM users WHERE username = ?')
+    const stmt = db.prepare('SELECT * FROM technicians WHERE username = ?')
     const technician = stmt.get(username)
 
     if(!technician){

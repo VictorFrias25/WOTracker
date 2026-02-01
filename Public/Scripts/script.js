@@ -1,14 +1,36 @@
+const dashboardView = document.getElementById('dashboard-view')
+const loginView = document.getElementById('login-view')
 const container = document.getElementById('data-container')
 const filterContainer = document.getElementById('facility-filter-group')
 const statusFilterSelect = document.getElementById('filter-open')
 const uploadCSVbtn = document.getElementById('uploadCSV')
 const totalOpenSpan = document.getElementById('total-open')
 const facilityFilterSelect = document.getElementById('filter-facility')
+const loginform = document.getElementById('login-form')
 
 let totalOpenCount = 0
 let currentFilter = 'Open'
 let currentFacilityFilter = 'all'
 let currentWOs = []
+
+async function checkAuth() {
+    try{
+        const response = await fetch('/api/me')
+        if(response.ok){
+            const user = await response.json()
+            console.log(`Authenticated as ${user.username}`)
+            loginView.style.display = 'none'
+            dashboardView.style.display = 'block'
+            await loadWorkorders()
+        } else {
+            console.log('Not authenticated')
+            loginView.style.display = 'block'
+            dashboardView.style.display = 'none'
+        }
+    } catch (err){
+        console.error('Auth check error:', err)
+    }
+}
 
 async function loadWorkorders() {
     const response = await fetch(`/api/wo`)
@@ -17,10 +39,12 @@ async function loadWorkorders() {
     await facilityFilterSelectOptions([...new Set(currentWOs.map(wo => wo.facility))])
     await renderList()
 }
+
 async function updateTotalOpenCount() {
     totalOpenCount = currentWOs.filter(wo => wo.status === 'Open').length
     totalOpenSpan.textContent = totalOpenCount
 }
+
 async function renderList() {
     try {
         container.innerHTML = ''
@@ -172,28 +196,6 @@ async function archiveWorkOrder(woNumber) {
     }
 }
 
-// async function deleteWorkOrder(woNumber) {
-//     if (confirm(`Are you sure you want to remove work order ${woNumber}? This action cannot be undone.`)) {
-//         try {
-//             const response = await fetch(`/api/wo/${woNumber}`, {
-//                 method: 'DELETE',
-//                 headers: { 'Content-Type': 'application/json' }
-//             })
-
-//             if (response.ok) {
-//                 console.log(`Deleted ${woNumber} successfully.`)
-//                 await loadWorkorders()
-//             } else {
-//                 const errorData = await response.json()
-//                 alert(`Delete failed: ${errorData.error}`)
-//             }
-//         } catch (err) {
-//             console.error('Delete error:', err)
-//             alert('Failed to delete work order')
-//         }
-//     }
-// }
-
 statusFilterSelect.addEventListener('change', (e) => {
     const selectedValue = e.target.value
     if (selectedValue === 'show-open') {
@@ -226,5 +228,31 @@ uploadCSVbtn.addEventListener('click', async() => {
     alert(result.message)
 })
 
+loginform.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const formData = new FormData(loginform)
+    const data = Object.fromEntries(formData.entries())
 
-loadWorkorders()
+    try{
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        if(response.ok){
+            console.log('Login successful')
+            loginform.reset()
+            await checkAuth()
+        } else {
+            const errorData = await response.json()
+            alert(`Login failed: ${errorData.error}`)
+        }
+    } catch (err){
+        console.error('Login error:', err)
+        alert(`An error occurred during login. Please try again.`)
+    }
+})
+
+
+//loadWorkorders()
+checkAuth()
