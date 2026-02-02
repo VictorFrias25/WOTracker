@@ -129,17 +129,21 @@ function createWorkOrderElement(wo) {
 }
 
 function facilityFilterSelectOptions(facilities) {
+    facilityFilterSelect.innerHTML = ''
     const allOption = document.createElement('option')
     allOption.value = 'all'
     allOption.textContent = 'All Facilities'
     facilityFilterSelect.appendChild(allOption)
     
     facilities.forEach(facility => {
+        if (!facility) return
         const option = document.createElement('option')
         option.value = facility
         option.textContent = facility
         facilityFilterSelect.appendChild(option)
     })
+
+    facilityFilterSelect.value = currentFacilityFilter
 }
 
 async function updateStatus(woNumber, newStatus) {
