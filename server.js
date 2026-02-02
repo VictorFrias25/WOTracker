@@ -74,8 +74,9 @@ app.get('/api/me', isAuthenticated, async (req, res) => {
 
 app.get('/api/wo', isAuthenticated, async (req, res) => {
     try{
-        const stmt = db.prepare('SELECT * FROM workorders')
-        const workorders = stmt.all()
+        const technicianId = req.session.technician.id
+        const stmt = db.prepare('SELECT * FROM workorders WHERE technician_id = ?')
+        const workorders = stmt.all(technicianId)
         res.json(workorders)
     } catch (err){
         console.error(`DB Fetch Error: ${err}`)
@@ -126,6 +127,7 @@ app.post('/api/importWOCSV', isAuthenticated, upload.single('csvFile'), async (r
         if (!req.file)
          return res.status(400).send(`No  file uploaded.`)
 
+        const technicianId = req.session.technician.id
         const rawCSV = req.file.buffer.toString(`utf-8`)
         const rawWorkorders = parse(rawCSV, {
             columns: true,
@@ -149,17 +151,18 @@ app.post('/api/importWOCSV', isAuthenticated, upload.single('csvFile'), async (r
                 room: row.RoomIncident,
                 date_opened: row.InsertedDT,
                 status: row.EStatusID,
-                info_description: row.RequestDescription
+                info_description: row.RequestDescription,
+                technician_id: technicianId
             }))
 
 
         const insert = db.prepare(`
             INSERT OR IGNORE INTO workorders (
                 wo_number, username, first_name, last_name,
-                facility, room, date_opened, status, info_description
+                facility, room, date_opened, status, info_description, technician_id
                 ) VALUES ( 
                 @wo_number, @username, @first_name, @last_name,
-                @facility, @room, @date_opened, @status, @info_description 
+                @facility, @room, @date_opened, @status, @info_description, @technician_id
                 )
             `)
 
