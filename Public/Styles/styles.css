@@ -129,6 +129,21 @@ body::before {
     margin: 0 auto;
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.header-brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .app-title {
@@ -458,6 +473,32 @@ body::before {
 
 .btn-primary:active {
     transform: translateY(-2px);
+}
+
+/* Ghost button for header actions */
+.btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-primary);
+    padding: 8px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 38px;
+    min-height: 38px;
+}
+
+.btn-ghost svg {
+    display: block;
+    color: var(--text-primary);
+}
+
+.btn-ghost:hover {
+    background: rgba(255,255,255,0.03);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
 }
 
 .btn-success {

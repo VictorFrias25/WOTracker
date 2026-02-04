@@ -258,5 +258,24 @@ loginform.addEventListener('submit', async (e) => {
 })
 
 
-//loadWorkorders()
+// Wire up logout
+const logoutBtn = document.getElementById('logout-btn')
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/api/logout', { method: 'POST' })
+            if (response.ok) {
+                console.log('Logged out')
+                await checkAuth()
+            } else {
+                const errorData = await response.json()
+                alert(`Logout failed: ${errorData.error}`)
+            }
+        } catch (err) {
+            console.error('Logout error:', err)
+            alert('Logout failed')
+        }
+    })
+}
+
 checkAuth()
